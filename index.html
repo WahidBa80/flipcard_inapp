@@ -5,26 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 
-body {
+html, body {
+  background: #ffffff !important;
+  color-scheme: light;
   margin: 0;
   padding: 40px 0;
   font-family: system-ui, sans-serif;
-  background: #fff;
   text-align: center;
 }
 
+/* Hide the checkbox */
 #flip {
   display: none;
 }
 
+/* Green button */
 label {
-  display: block;
+  display: inline-block;
+  padding: 12px 24px;
+  background: #28a745; /* Green */
+  color: white;
   font-size: 16px;
-  color: #777;
-  margin-bottom: 20px;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
+  margin-bottom: 20px;
+  user-select: none;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
+label:active {
+  background: #218838;
+  transform: scale(0.97);
+}
+
+/* Card container */
 .card-wrapper {
   width: 80vw;
   height: 120vw;
@@ -34,6 +50,7 @@ label {
   margin: 0 auto;
 }
 
+/* Card faces */
 .card-face {
   position: absolute;
   width: 100%;
@@ -49,14 +66,17 @@ label {
   object-fit: cover;
 }
 
+/* Default: front visible */
 .card-front {
   opacity: 1;
 }
 
+/* Back hidden */
 .card-back {
   opacity: 0;
 }
 
+/* Flip logic */
 #flip:checked ~ .card-wrapper .card-front {
   opacity: 0;
 }
