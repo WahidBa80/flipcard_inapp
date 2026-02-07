@@ -5,18 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 
-/* 3. Enhanced background: gradient + subtle vignette + noise */
+/* Enhanced background: gradient + vignette + noise */
 html, body {
   margin: 0;
   padding: 40px 0;
   font-family: system-ui, sans-serif;
   text-align: center;
   color-scheme: light;
-
-  /* Soft gradient */
   background: linear-gradient(180deg, #ffffff 0%, #eef3f7 100%) !important;
-
-  /* Vignette */
   position: relative;
 }
 
@@ -29,7 +25,6 @@ html::before {
   z-index: -1;
 }
 
-/* Subtle noise texture */
 html::after {
   content: "";
   position: fixed;
@@ -45,7 +40,7 @@ html::after {
   display: none;
 }
 
-/* 2. Improved button relationship: closer spacing + optional icon */
+/* Green button */
 label {
   display: inline-block;
   padding: 12px 24px;
@@ -55,7 +50,7 @@ label {
   font-weight: 600;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 16px; /* tighter spacing */
+  margin-top: 22px;
   user-select: none;
   box-shadow: 0 3px 6px rgba(0,0,0,0.15);
   transition: background 0.2s ease, transform 0.1s ease;
@@ -66,34 +61,44 @@ label:active {
   transform: scale(0.97);
 }
 
-/* Card container */
+/* Card container with perspective */
 .card-wrapper {
   width: 80vw;
   height: 120vw;
   max-width: 360px;
   max-height: 540px;
-  position: relative;
   margin: 0 auto;
+  position: relative;
 
-  /* 1. Glow + shadow */
+  /* Stronger shadow */
   filter:
-    drop-shadow(0 8px 18px rgba(0,0,0,0.25))
-    drop-shadow(0 0 8px rgba(255,255,255,0.5));
+    drop-shadow(0 10px 22px rgba(0,0,0,0.32))
+    drop-shadow(0 0 10px rgba(255,255,255,0.55));
 
-  /* Fade-in animation */
   animation: fadeIn 0.6s ease;
+
+  /* 3D perspective */
+  perspective: 1200px;
 }
 
-/* Fade-in keyframes */
+/* Fade-in animation */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Tap-lift animation */
-.card-wrapper:active {
-  transform: scale(0.98);
-  transition: transform 0.1s ease;
+/* Inner 3D flip container */
+.flip-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.4, 0.2, 0.2, 1); /* snappy */
+}
+
+/* When checked → rotate 180° */
+#flip:checked ~ .card-wrapper .flip-inner {
+  transform: rotateY(180deg);
 }
 
 /* Card faces */
@@ -101,8 +106,8 @@ label:active {
   position: absolute;
   width: 100%;
   height: 100%;
-  transition: opacity 0.4s ease;
-  border-radius: 24px; /* smoother corners */
+  backface-visibility: hidden; /* critical for real flip */
+  border-radius: 28px;
   overflow: hidden;
 }
 
@@ -112,23 +117,9 @@ label:active {
   object-fit: cover;
 }
 
-/* Default: front visible */
-.card-front {
-  opacity: 1;
-}
-
-/* Back hidden */
+/* Back side rotated */
 .card-back {
-  opacity: 0;
-}
-
-/* Flip logic */
-#flip:checked ~ .card-wrapper .card-front {
-  opacity: 0;
-}
-
-#flip:checked ~ .card-wrapper .card-back {
-  opacity: 1;
+  transform: rotateY(180deg);
 }
 
 </style>
@@ -139,16 +130,18 @@ label:active {
 <input type="checkbox" id="flip">
 
 <div class="card-wrapper">
-  <div class="card-face card-front">
-    <img src="card4front_v2.png" alt="Front">
-  </div>
+  <div class="flip-inner">
+    <div class="card-face card-front">
+      <img src="card4front_v2.png" alt="Front">
+    </div>
 
-  <div class="card-face card-back">
-    <img src="card4back_v2.png" alt="Back">
+    <div class="card-face card-back">
+      <img src="card4back_v2.png" alt="Back">
+    </div>
   </div>
 </div>
 
-<label for="flip">⇆ Tap to flip</label>
+<label for="flip">⟳ Tap to flip</label>
 
 </body>
 </html>
